@@ -1,0 +1,362 @@
+openapi: 3.0.0
+info:
+  title: Hillel Task App API
+  version: 0.1.0
+
+servers:
+  - url: 'http://localhost:8000/api'
+    description: Local server
+  - url: 'https://tomcat.ownerofglory.com/hillel-task-app/api'
+    description: Production server
+
+tags:
+  - name: Boards
+    description: Operations related to boards
+  - name: TaskLists
+    description: Operations related to task lists
+  - name: Tasks
+    description: Operations related to tasks
+
+
+paths:
+  /boards:
+    get:
+      tags:
+        - Boards
+      summary: Returns a list of boards
+      responses:
+        200:
+          description: A list of boards
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Board'
+    post:
+      tags:
+        - Boards
+      summary: Create a board
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BoardWithoutId'
+      responses:
+        201:
+          description: Created board item
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Board'
+
+  /boards/{id}:
+    get:
+      tags:
+        - Boards
+      summary: Returns a specific board by its ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Board ID
+          schema:
+            type: integer
+      responses:
+        200:
+          description: A board item
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Board'
+    put:
+      tags:
+        - Boards
+      summary: Updates a board
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Board'
+      responses:
+        200:
+          description: Updated board item
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Board'
+    delete:
+      tags:
+        - Boards
+      summary: Deletes a board
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        200:
+          description: Deleted board item
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Board'
+
+  /lists:
+    get:
+      tags:
+        - TaskLists
+      summary: Returns a list of tasklists for a board
+      parameters:
+        - name: boardId
+          in: query
+          required: true
+          description: Board ID
+          schema:
+            type: integer
+      responses:
+        200:
+          description: A list of tasklists
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/TaskList'
+    post:
+      tags:
+        - TaskLists
+      summary: Create a tasklist
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TaskListWithoutId'
+      responses:
+        201:
+          description: Created tasklist item
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TaskList'
+
+  /lists/{id}:
+    get:
+      tags:
+        - TaskLists
+      summary: Returns a specific tasklist by its ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: TaskList ID
+          schema:
+            type: integer
+      responses:
+        200:
+          description: A tasklist item
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TaskList'
+    put:
+      tags:
+        - TaskLists
+      summary: Updates a tasklist
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TaskList'
+      responses:
+        200:
+          description: Updated tasklist item
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TaskList'
+    delete:
+      tags:
+        - TaskLists
+      summary: Deletes a tasklist
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        200:
+          description: Deleted tasklist item
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TaskList'
+
+  /lists/{listId}/tasks:
+    get:
+      tags:
+        - Tasks
+      summary: Returns tasks for a specific tasklist
+      parameters:
+        - name: listId
+          in: path
+          required: true
+          description: TaskList ID
+          schema:
+            type: integer
+      responses:
+        200:
+          description: A list of tasks
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Task'
+    post:
+      tags:
+        - Tasks
+      summary: Create a task for a specific tasklist
+      parameters:
+        - name: listId
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TaskWithoutId'
+      responses:
+        201:
+          description: Created task item
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Task'
+
+  /lists/{listId}/tasks/{taskId}:
+    get:
+      tags:
+        - Tasks
+      summary: Returns a specific task by its ID
+      parameters:
+        - name: listId
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: taskId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        200:
+          description: A task item
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Task'
+    put:
+      tags:
+        - Tasks
+      summary: Updates a task
+      parameters:
+        - name: listId
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: taskId
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Task'
+      responses:
+        200:
+          description: Updated task item
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Task'
+
+components:
+  schemas:
+    Board:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        name:
+          type: string
+          example: "Home"
+    BoardWithoutId:
+      type: object
+      properties:
+        name:
+          type: string
+          example: "Home"
+    TaskList:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 101
+        name:
+          type: string
+          example: "Todo"
+    TaskListWithoutId:
+      type: object
+      properties:
+        name:
+          type: string
+          example: "Todo"
+    Task:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 201
+        title:
+          type: string
+          example: "Task 1"
+        description:
+          type: string
+          example: "Description 1"
+    TaskWithoutId:
+      type: object
+      properties:
+        title:
+          type: string
+          example: "Task 1"
+        description:
+          type: string
+          example: "Description 1"
