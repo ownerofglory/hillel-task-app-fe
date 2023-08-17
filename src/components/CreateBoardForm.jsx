@@ -1,13 +1,21 @@
 import React from 'react'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Form } from 'react-bootstrap'
 import { Button } from 'react-bootstrap'
 import { FontAwesomeIcon }from '@fortawesome/react-fontawesome'
 import { faPlus } from '@fortawesome/free-solid-svg-icons'
 
-const CreateBoardForm = () => {
+const CreateBoardForm = (props) => {
     const [open, setOpen] = useState(false)
     const [buttonVar, setButtonVar] = useState('secondary')
+    const [board, setBoard] = useState({})
+
+    useEffect(() => {
+      return () => {
+        
+      }
+    }, [])
+    
 
     const style = {
         display: 'flex',
@@ -25,8 +33,10 @@ const CreateBoardForm = () => {
     
     const onButtonClick = (e) => {
         if (open) {
-            setOpen(false)
-            setButtonVar('secondary')
+            props.createHandler(board).then(() => {
+                setOpen(false)
+                setButtonVar('secondary')
+            })
         } else {
             setOpen(true)
             setButtonVar('primary')
@@ -46,6 +56,7 @@ const CreateBoardForm = () => {
                         type="text"
                         placeholder="Enter board name"
                         aria-describedby="passwordHelpBlock"
+                        onInput={(e) => setBoard({name: e.target.value})}
                     />
 
                 </div>

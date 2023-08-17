@@ -12,7 +12,7 @@ function App() {
       <BrowserRouter>
         <Routes>
           <Route path="/" element={ <BoardsPage/> } />
-          <Route path="/boards" element={ <TasksPage/> } />
+          <Route path="/boards/:id" element={ <TasksPage/> } />
         </Routes>
       </BrowserRouter>
     </div>

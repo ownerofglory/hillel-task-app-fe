@@ -1,49 +1,81 @@
-import React from 'react'
+import React, {  useState, useEffect } from 'react'
+import { useParams } from 'react-router-dom'
 
 import NavigationBar from '../components/common/NavigationBar'
 import FlexHorScrollContainer from '../components/common/FlexHorScrollContainer'
 import TaskColumn from '../components/TaskColumn'
-import TaskItem from '../components/TaskItem'
 import CreateListForm from '../components/CreateListForm'
 
+const baseUrl = process.env.REACT_APP_BACKEND_URL ?? 'http://localhost:8000/api'
+
 const TasksPage = () => {
+    const {id} = useParams()
+    const [board, setBoard] = useState({})
+    const [taskLists, setTaskLists] = useState([])
+
+    const getTaskLists = () => {
+        return fetch(`${baseUrl}/lists?boardId=${id}`)
+            .then(resp => {
+                if (resp.status === 200) {
+                    return resp.json()
+                }
+            })
+    }
+
+    useEffect(() => {
+         fetch(`${baseUrl}/boards/${id}`)
+            .then(resp => {
+                if (resp.status === 200) {
+                    return resp.json()
+                }
+            }).then(data => {
+                if (data) {
+                    setBoard(data)
+                }
+            }).then(() => getTaskLists())
+              .then(data => {
+                if (data) {
+                    setTaskLists(data)
+                }
+            })
+      return () => {
+      }
+    }, [id])
+
+    const onTaskListCreate = (taskList) => {
+        return fetch(`${baseUrl}/lists`, {
+            method: 'POST',
+            body: taskList
+        }).then(resp => {
+            if (resp.status === 200) {  
+                return resp.json()
+            }
+        }).then(data => {
+            if (data) {
+                const newTaskList = [data, ...taskLists]
+                setTaskLists(newTaskList)
+            }
+        })
+    }
+
+    const onListDelete = (taskList) => {
+        const newTaskLists = taskLists.filter(list => list.id !== taskList.id)
+        setTaskLists(newTaskLists)
+    }
 
   return (
     <div>
         <NavigationBar />
-        <h1>Task Board name</h1>
+        <h1>{board.name}</h1>
 
         <FlexHorScrollContainer>
-            <TaskColumn>
-                <TaskItem></TaskItem>
-                <TaskItem></TaskItem>
-                <TaskItem></TaskItem>
-                <TaskItem></TaskItem>
-            </TaskColumn>
+            {
+                taskLists.map(list => (
+                    <TaskColumn taskList={list} listDeleteHandler={onListDelete} />
+                ))
+            }
 
-            <TaskColumn>
-                <TaskItem></TaskItem>
-                <TaskItem></TaskItem>
-                <TaskItem></TaskItem>
-                <TaskItem></TaskItem>
-                <TaskItem></TaskItem>
-                <TaskItem></TaskItem>
-                <TaskItem></TaskItem>
-                <TaskItem></TaskItem>
-            </TaskColumn>
-
-            <TaskColumn>
-                <TaskItem></TaskItem>
-            </TaskColumn>
-
-            <TaskColumn>
-            </TaskColumn>
-
-            <TaskColumn>
-                <TaskItem></TaskItem>
-            </TaskColumn>
-
-            <CreateListForm />
+            <CreateListForm createHandler={onTaskListCreate} />
 
         </FlexHorScrollContainer>
     </div>

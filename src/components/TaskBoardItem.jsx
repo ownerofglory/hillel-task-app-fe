@@ -7,9 +7,10 @@ import { FontAwesomeIcon }from '@fortawesome/react-fontawesome'
 import { faXmark, faPenToSquare } from '@fortawesome/free-solid-svg-icons'
 import DeletePopup from '../components/common/DeletePopup'
 
-const TaskBoardItem = () => {
+const TaskBoardItem = (props) => {
   const navigate = useNavigate()
   const [deleteModalShow, setDeleteModalShow] = useState(false);
+  const [board, setBoard] = useState(props.board);
 
   const onBoardDelete = (boardId) => {
     console.log('deleting board: ', boardId)
@@ -35,14 +36,14 @@ const TaskBoardItem = () => {
   }
 
   const obBoardClicked = (e) => {
-    navigate('/boards')
+    navigate(`/boards/${board.id}`)
   }
 
     return (
         <Card style={cardStyle}>
         <Card.Body>
           <div style={cardBodyStyle}>
-            <Card.Title onClick={(e) => obBoardClicked(e)} style={{width: '60%'}}>Card Title</Card.Title>
+            <Card.Title onClick={(e) => obBoardClicked(e)} style={{width: '60%'}}>{board.name}</Card.Title>
             <Button variant='outline-warning'>
               <FontAwesomeIcon icon={faPenToSquare} />
             </Button>

@@ -1,45 +1,63 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Container, Button } from 'react-bootstrap'
 import { FontAwesomeIcon }from '@fortawesome/react-fontawesome'
 import { faXmark, faPenToSquare } from '@fortawesome/free-solid-svg-icons'
 import DeletePopup from '../components/common/DeletePopup'
 import EditPopup from './common/EditPopup'
+import TaskItem from '../components/TaskItem'
 
 import CreateTaskForm from './CreateTaskForm'
+
+const listStyle = {
+    border: '1px solid rgba(255, 255, 255, 0.15)',
+    borderRadius: '0.375em',
+    marginTop: '10px',
+}
+
+const columnHeaderStyle = {
+    display: 'flex',
+    flexDirection: 'row',
+    paddingTop: '10px',
+    justifyContent: 'space-around'
+}
+
+const listWrapperStyle = {
+    marginLeft: '10px',
+    marginRight: '10px'
+}
+
+const style = {
+    display: 'flex',
+    flexDirection: 'column',
+    maxHeight: '72vh',
+    maxWidth: '20vw',
+    minWidth: '320px',
+    overflowY: 'scroll',
+    overflowX: 'hidden',
+    marginTop: '20px',
+    marginRight: '10px'
+}
+
+const baseUrl = process.env.REACT_APP_BACKEND_URL ?? 'http://localhost:8000/api'
 
 const TaskColumn = (props) => {
     const [taskList, setTaskList] = useState(props.taskList)
     const [deleteModalShown, setDeleteModalShown] = useState(false)
     const [editPopupShown, setEditPopupShown] = useState(false)
+    const [tasks, setTasks] = useState([])
 
-    const listStyle = {
-        border: '1px solid rgba(255, 255, 255, 0.15)',
-        borderRadius: '0.375em',
-        marginTop: '10px',
-    }
-
-    const columnHeaderStyle = {
-        display: 'flex',
-        flexDirection: 'row',
-        paddingTop: '10px',
-        justifyContent: 'space-around'
-    }
-
-    const listWrapperStyle = {
-        marginLeft: '10px',
-        marginRight: '10px'
-    }
-
-    const style = {
-        display: 'flex',
-        flexDirection: 'column',
-        maxHeight: '72vh',
-        maxWidth: '20vw',
-        minWidth: '320px',
-        overflowY: 'scroll',
-        overflowX: 'hidden',
-        marginTop: '20px',
-        marginRight: '10px'
+    const getTasks = (id) => {
+        fetch(`${baseUrl}/lists/${id}/tasks`)
+            .then(resp => {
+                if (resp.status === 200) {
+                    return resp.json()
+                }
+            })
+            .then(data => {
+                if (data) {
+                    setTasks(data)
+                }
+            })
     }
 
     const onDragOver = (e) => {
@@ -53,9 +71,20 @@ const TaskColumn = (props) => {
 
     const onListDelete = (id) => {
         console.log('delete list: ', id)
-        fetch('', {
+        fetch(`${baseUrl}/lists/${id}`, {
             method: 'delete',
-        }).then(resp => resp.json())
+        })
+            .then(resp => {
+                if (resp.status === 200) {
+                    return resp.json()
+                }
+            })
+            .then(data => {
+                if (data) {
+                    props.listDeleteHandler(data)
+                    closeDeleteModal()
+                }
+            })
     }
 
     const showDeleteModal = () => {
@@ -75,19 +104,26 @@ const TaskColumn = (props) => {
     }
 
     const onTaskListEdit = (editedTaskList) => {
-        fetch('', {
+        fetch(`${baseUrl}/lists/${taskList.id}`, {
             method: 'PUT',
             body: editedTaskList
         }).then(resp => resp.json())
-        .then(data => setTaskList(data))
+        .then(data => {
+            setTaskList(data)
+            closeEditPopup()
+        })
     }
+
+    useEffect(() => {
+        getTasks(taskList.id)
+    }, [])
 
   return (
     <div style={listWrapperStyle}>
         <Container style={listStyle}>
             <div style={columnHeaderStyle}>
                 <div style={{width: '60%'}}>
-                    <h3>List</h3>
+                    <h3>{taskList.name}</h3>
                 </div>
                 <Button variant='outline-warning' onClick={(e) => openEditPopup()} >
                     <FontAwesomeIcon icon={faPenToSquare} />
@@ -98,19 +134,23 @@ const TaskColumn = (props) => {
             </div>
 
             <Container className='dropZone' style={style} onDrop={(e) => onDrop(e)} onDragOver={(e) => onDragOver(e)}>
-            {props.children}
+                {
+                    tasks.map(task => (
+                        <TaskItem task={task} />
+                    ))
+                }
             </Container>
 
             
         </Container>
         <CreateTaskForm/>
 
-        <DeletePopup model={{}} 
+        <DeletePopup model={taskList} 
             deleteHandler={onListDelete} 
             show={deleteModalShown} 
             closeHandler={closeDeleteModal} />
 
-        <EditPopup model={{name:'d'}}
+        <EditPopup model={taskList} 
                             show={editPopupShown} 
                             closeHandler={closeEditPopup}
                             editHandler={onTaskListEdit}

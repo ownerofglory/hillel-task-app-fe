@@ -5,9 +5,10 @@ import { Button } from 'react-bootstrap'
 import { FontAwesomeIcon }from '@fortawesome/react-fontawesome'
 import { faPlus } from '@fortawesome/free-solid-svg-icons'
 
-const CreateListForm = () => {
+const CreateListForm = (props) => {
     const [open, setOpen] = useState(false)
     const [buttonVar, setButtonVar] = useState('secondary')
+    const [taskList, setTaskList] = useState({})
 
     const style = {
         display: 'flex',
@@ -25,8 +26,10 @@ const CreateListForm = () => {
     
     const onButtonClick = (e) => {
         if (open) {
-            setOpen(false)
-            setButtonVar('secondary')
+            props.createHandler(taskList).then(() => {
+                setOpen(false)
+                setButtonVar('secondary')
+            })
         } else {
             setOpen(true)
             setButtonVar('primary')
@@ -46,6 +49,7 @@ const CreateListForm = () => {
                         type="text"
                         placeholder="Enter list name"
                         aria-describedby="passwordHelpBlock"
+                        onInput={(e) => setTaskList({name: e.target.value})}
                     />
 
                 </div>

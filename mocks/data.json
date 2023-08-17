@@ -1,80 +1,52 @@
 {
     "/api/boards": {
-        "get": {
-            "data": [
-                {"id":1,"name": "Home"},
-                {"id":2,"name": "Work tasks"},
-                {"id":3,"name": "University"}
-            ]
-        },
-        "post": {
-            
-        },
-        "put": {
-            "data": {"id":1,"name": "Updated board"}
-        }
+        "get": [
+            {"id":1,"name": "Home"},
+            {"id":2,"name": "Work tasks"},
+            {"id":3,"name": "University"}
+        ],
+        "post":  {"id":1,"name": "Home"}
     },
     "/api/boards/:id": {
         "get": {
-            "data": {
-                "id":1,
-                "name": "Home"
-            }
+            "id":1,
+            "name": "Home"
         },
         "delete": {
-            "data": {
-                "id":1,
-                "name": "Home"
-            }
-        }
+            "id":1,
+            "name": "Home"
+        },
+        "put": {"id":1,"name": "Updated board"}
     },
     "/api/lists": {
-        "get": {
-            "data": [
-                {"id":101,"name": "Todo"},
-                {"id":102,"name": "In progress"},
-                {"id":103,"name": "Done"}
-            ]
-        },
-        "post": {
-
-        }, 
-        "put": {
-            "data": {"id":103,"name": "Updated List"}
-        }
+        "get": [
+            {"id":101,"name": "Todo"},
+            {"id":102,"name": "In progress"},
+            {"id":103,"name": "Done"}
+        ],
+        "post":  {"id":101,"name": "Todo"}
     },
     "/api/lists/:id": {
         "get": {
-            "data": {
-                "id":101,
-                "name": "Todo"  
-            }
+            "id":101,
+            "name": "Todo"  
         },
         "delete": {
-            "data": {
-                "id":101,
-                "name": "Todo"  
-            }
-        }
+            "id":101,
+            "name": "Todo"  
+        }, 
+        "put": {"id":103,"name": "Updated List"}
     },
     "/api/lists/:id/tasks": {
-        "get": {
-            "data": [
-                {"id":201,"title": "Task 1", "description": "Description 1"},
-                {"id":202,"title": "Task 2", "description": "Description 2"},
-                {"id":203,"title": "Task 3", "description": "Description 3"}
-            ]
-        },
-        "post": {
-
-        },
-        "put": {
-            "data": {"id":201,"title": "Updated Task 1", "description": "Updated Description 1"}
-        }
+        "get": [
+            {"id":201,"title": "Task 1", "description": "Description 1"},
+            {"id":202,"title": "Task 2", "description": "Description 2"},
+            {"id":203,"title": "Task 3", "description": "Description 3"}
+        ],
+        "post":  {"id":201,"title": "Task 1", "description": "Description 1"}
     },
     "/api/lists/:id/tasks/:id": {
-        "get": {
-            "data": {"id":201,"title": "Task 1", "description": "Description 1"}
-        }
+        "get":  {"id":201,"title": "Task 1", "description": "Description 1"},
+        "put": {"id":201,"title": "Updated Task 1", "description": "Updated Description 1"}
     }
 }

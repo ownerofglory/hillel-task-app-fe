@@ -1,5 +1,5 @@
 import React from 'react';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 import Card from 'react-bootstrap/Card';
 import EditPopup from './common/EditPopup';
@@ -51,7 +51,6 @@ const TaskItem = (props) => {
         .then(data => setStask(data))
     }
 
-
     return (
             <Card style={style} 
                 draggable='true' 
@@ -61,10 +60,9 @@ const TaskItem = (props) => {
                 onDoubleClick={openEditPopup}>
 
                 <Card.Body>
-                <Card.Title>Card Title</Card.Title>
+                <Card.Title>{task?.title}</Card.Title>
                 <Card.Text>
-                    Some quick example text to build on the card title and make up the
-                    bulk of the card's content.
+                   {task?.description}
                 </Card.Text>
                 </Card.Body>
                 <EditPopup model={{title:'d', description: 'd'}}
