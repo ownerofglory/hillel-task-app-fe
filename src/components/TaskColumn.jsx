@@ -3,12 +3,14 @@ import { Container, Button } from 'react-bootstrap'
 import { FontAwesomeIcon }from '@fortawesome/react-fontawesome'
 import { faXmark, faPenToSquare } from '@fortawesome/free-solid-svg-icons'
 import DeletePopup from '../components/common/DeletePopup'
+import EditPopup from './common/EditPopup'
 
 import CreateTaskForm from './CreateTaskForm'
 
 const TaskColumn = (props) => {
     const [taskList, setTaskList] = useState(props.taskList)
     const [deleteModalShown, setDeleteModalShown] = useState(false)
+    const [editPopupShown, setEditPopupShown] = useState(false)
 
     const listStyle = {
         border: '1px solid rgba(255, 255, 255, 0.15)',
@@ -64,6 +66,22 @@ const TaskColumn = (props) => {
         setDeleteModalShown(false)
     }
 
+    const openEditPopup = () => {
+        setEditPopupShown(true)
+    }
+
+    const closeEditPopup = () => {
+        setEditPopupShown(false)
+    }
+
+    const onTaskListEdit = (editedTaskList) => {
+        fetch('', {
+            method: 'PUT',
+            body: editedTaskList
+        }).then(resp => resp.json())
+        .then(data => setTaskList(data))
+    }
+
   return (
     <div style={listWrapperStyle}>
         <Container style={listStyle}>
@@ -71,7 +89,7 @@ const TaskColumn = (props) => {
                 <div style={{width: '60%'}}>
                     <h3>List</h3>
                 </div>
-                <Button variant='outline-warning'>
+                <Button variant='outline-warning' onClick={(e) => openEditPopup()} >
                     <FontAwesomeIcon icon={faPenToSquare} />
                 </Button>
                 <Button variant='outline-danger' onClick={(e) => showDeleteModal()} >
@@ -91,6 +109,12 @@ const TaskColumn = (props) => {
             deleteHandler={onListDelete} 
             show={deleteModalShown} 
             closeHandler={closeDeleteModal} />
+
+        <EditPopup model={{name:'d'}}
+                            show={editPopupShown} 
+                            closeHandler={closeEditPopup}
+                            editHandler={onTaskListEdit}
+                            />
 
     </div>
   )

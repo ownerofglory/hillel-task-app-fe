@@ -37,7 +37,6 @@ const TasksPage = () => {
             </TaskColumn>
 
             <TaskColumn>
-                <TaskItem></TaskItem>
             </TaskColumn>
 
             <TaskColumn>
