@@ -45,6 +45,7 @@ const TaskColumn = (props) => {
     const [deleteModalShown, setDeleteModalShown] = useState(false)
     const [editPopupShown, setEditPopupShown] = useState(false)
     const [tasks, setTasks] = useState([])
+    const [draggedTask, setDraggedTask] = useState()
 
     const getTasks = (id) => {
         fetch(`${baseUrl}/lists/${id}/tasks`)
@@ -64,10 +65,6 @@ const TaskColumn = (props) => {
         e.preventDefault()
     }
 
-    const onDrop = (e) => {
-        e.preventDefault()
-        console.log('drop', e)
-    }
 
     const onListDelete = (id) => {
         console.log('delete list: ', id)
@@ -156,6 +153,23 @@ const TaskColumn = (props) => {
         })
     }
 
+    const onTaskDragEnd = (task) => {
+        setDraggedTask(task)
+    }
+
+    const onTaskDragStart = (task) => {
+        props.taskMoveStartHandler(taskList, task)
+    }
+
+    const onDrop = (e) => {
+        e.preventDefault()
+        props.taskMoveEndHandler(taskList)
+    }
+
+    const onTaskDrop = () => {
+        getTasks(taskList.id)
+    }
+
     useEffect(() => {
         getTasks(taskList.id)
     }, [])
@@ -178,7 +192,11 @@ const TaskColumn = (props) => {
             <Container className='dropZone' style={style} onDrop={(e) => onDrop(e)} onDragOver={(e) => onDragOver(e)}>
                 {
                     tasks.map(task => (
-                        <TaskItem task={task} editHandler={onTaskEdit} deleteHandler={onTaskDelete} />
+                        <TaskItem task={task} 
+                            editHandler={onTaskEdit} 
+                            deleteHandler={onTaskDelete} 
+                            dragStartHandler={onTaskDragStart}
+                            dragEndHandler={onTaskDragEnd}/>
                     ))
                 }
             </Container>

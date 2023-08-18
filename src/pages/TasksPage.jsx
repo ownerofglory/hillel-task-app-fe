@@ -12,6 +12,7 @@ const TasksPage = () => {
     const {id} = useParams()
     const [board, setBoard] = useState({})
     const [taskLists, setTaskLists] = useState([])
+    const [taskMove, setTaskMove] = useState({})
 
     const getTaskLists = () => {
         return fetch(`${baseUrl}/lists?boardId=${id}`)
@@ -63,6 +64,35 @@ const TasksPage = () => {
         setTaskLists(newTaskLists)
     }
 
+    const onTaskMoveStart = (oldTaskList, task) => {
+        taskMove.oldList = oldTaskList
+        taskMove.task = task
+        setTaskMove(taskMove)
+    }
+
+    const onTaskMoveEnd = (newTaskList) => {
+        taskMove.newList = newTaskList
+        setTaskMove(taskMove)
+        console.log('Task moved', taskMove)
+
+        return fetch(`${baseUrl}/lists/taskMove`, {
+            method: 'POST',
+            body: JSON.stringify(taskMove)
+        }).then(resp => {
+            if (resp.status === 200) {
+                return resp.json()
+            }
+        }).then(data => {
+            if (data) {
+                getTaskLists().then(data => {
+                    if (data) {
+                        setTaskLists(data)
+                    }
+                })
+            }
+        })
+    }
+
   return (
     <div>
         <NavigationBar />
@@ -71,7 +101,11 @@ const TasksPage = () => {
         <FlexHorScrollContainer>
             {
                 taskLists.map(list => (
-                    <TaskColumn taskList={list} listDeleteHandler={onListDelete} />
+                    <TaskColumn taskList={list} 
+                        listDeleteHandler={onListDelete}
+                        taskMoveStartHandler={onTaskMoveStart}
+                        taskMoveEndHandler={onTaskMoveEnd}
+                        />
                 ))
             }
 

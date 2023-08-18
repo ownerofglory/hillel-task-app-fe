@@ -22,6 +22,7 @@ const TaskItem = (props) => {
     const startDrag = (e) => {
         console.log('start drag', e)
         setStyle(dragStyle)
+        props.dragStartHandler(task)
     }
 
     const endDrag = (e) => {
@@ -30,9 +31,7 @@ const TaskItem = (props) => {
     }
 
     const drop = (e) => {
-        if (e.target.className === 'dropZone') {
-            console.log('drop', e)
-        }
+        console.log('item drop', e)
     }
 
     const openEditPopup = () => {

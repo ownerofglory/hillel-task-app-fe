@@ -48,5 +48,12 @@
     "/api/lists/:id/tasks/:id": {
         "get":  {"id":201,"title": "Task 1", "description": "Description 1"},
         "put": {"id":201,"title": "Updated Task 1", "description": "Updated Description 1"}
+    },
+    "/api/lists/taskMove": {
+        "post": {
+            "oldList": {"id":101,"name": "Todo"},
+            "newList": {"id":102,"name": "In progress"},
+            "task": {"id":202,"title": "Task 2", "description": "Description 2"}
+        }
     }
 }
