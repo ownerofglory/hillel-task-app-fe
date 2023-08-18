@@ -38,6 +38,32 @@ const BoardsPage = () => {
     })
   }
 
+  const onBoardEdit = (board) => {
+    return fetch(`${baseUrl}/boards/${board.id}`, {
+      method: 'PUT',
+      body: board
+    }).then(resp => {
+      if (resp.status === 200) {
+        return resp.json()
+      }
+    })
+  }
+
+  const onBoardDelete = (id) => {
+    return fetch(`${baseUrl}/boards/${id}`, {
+      method: 'DELETE',
+    }).then(resp => {
+      if (resp.status === 200) {
+        return resp.json()
+      }
+    }).then(data => {
+      if (data) {
+        const updatedBoards = boards.filter(board => board.id !== data.id)
+        setBoards(updatedBoards)
+      }
+    })
+  }
+
   useEffect(() => {
     getBoards().then(data => setBoards(data))
   
@@ -60,14 +86,16 @@ const BoardsPage = () => {
               <FlexItemContainer>
                 {
                   boards.map(board => (
-                    <TaskBoardItem board={board} />
+                    <TaskBoardItem board={board} 
+                    editHandler={onBoardEdit} 
+                    deleteHandler={onBoardDelete} />
                   ))
                 }
                 {/* <TaskBoardItem />
                 <TaskBoardItem />
                 <TaskBoardItem /> */}
 
-                <CreateBoardForm createHandler={onBoardCreate}/>
+                <CreateBoardForm createHandler={onBoardCreate} />
               </FlexItemContainer>
             </Col>
           </Row>

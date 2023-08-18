@@ -44,11 +44,16 @@ const TaskItem = (props) => {
     }
 
     const onTaskEdit = (editedTask) => {
-        fetch('', {
-            method: 'PUT',
-            body: editedTask
-        }).then(resp => resp.json())
-        .then(data => setStask(data))
+        props.editHandler(editedTask).then(data => {
+            if (data) {
+                setStask(data)
+            }
+            closeEditPopup()
+        })
+    }
+
+    const onTaskDelete = (id) => {
+        // TODO: implement deletion
     }
 
     return (
@@ -65,7 +70,7 @@ const TaskItem = (props) => {
                    {task?.description}
                 </Card.Text>
                 </Card.Body>
-                <EditPopup model={{title:'d', description: 'd'}}
+                <EditPopup model={task}
                     show={editPopupShown}
                     closeHandler={closeEditPopup}
                     editHandler={onTaskEdit}

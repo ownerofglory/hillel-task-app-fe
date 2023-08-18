@@ -114,6 +114,48 @@ const TaskColumn = (props) => {
         })
     }
 
+    const onTaskEdit = (task) => {
+        return fetch(`${baseUrl}/lists/${taskList.id}/tasks/${task.id}`, {
+            method: 'PUT',
+            body: task
+        }).then(resp => {
+            if (resp.status === 200) {
+                return resp.json()
+            }
+        })
+    }
+
+    const onTaskDelete = (id) => {
+        return fetch(`${baseUrl}/lists/${taskList.id}/tasks/${task.id}`, {
+            method: 'DELETE'
+        }).then(resp => {
+            if (resp.status === 200) {
+                return resp.json()
+            }
+        }).then(data => {
+            if (data) {
+                const tasks = tasks.filter(task => task.id !== data.id)
+                setTasks(tasks)
+            }
+        })
+    }
+
+    const onTaskCreate = (task) => {
+        return fetch(`${baseUrl}/lists/${taskList.id}/tasks`, {
+            method: 'POST',
+            body: task
+        }).then(resp => {
+            if (resp.status === 200) {
+                return resp.json()
+            }
+        }).then(data => {
+            if (data) {
+                const newTasks = [data, ...tasks]
+                setTasks(newTasks)
+            }
+        })
+    }
+
     useEffect(() => {
         getTasks(taskList.id)
     }, [])
@@ -136,14 +178,14 @@ const TaskColumn = (props) => {
             <Container className='dropZone' style={style} onDrop={(e) => onDrop(e)} onDragOver={(e) => onDragOver(e)}>
                 {
                     tasks.map(task => (
-                        <TaskItem task={task} />
+                        <TaskItem task={task} editHandler={onTaskEdit} deleteHandler={onTaskDelete} />
                     ))
                 }
             </Container>
 
             
         </Container>
-        <CreateTaskForm/>
+        <CreateTaskForm createHandler={onTaskCreate}/>
 
         <DeletePopup model={taskList} 
             deleteHandler={onListDelete} 
