@@ -46,7 +46,10 @@ const TasksPage = () => {
     const onTaskListCreate = (taskList) => {
         return fetch(`${baseUrl}/lists`, {
             method: 'POST',
-            body: taskList
+            body: JSON.stringify({...taskList, boardId: board.id}),
+            headers: {
+                'Content-Type': 'application/json'
+            }
         }).then(resp => {
             if (resp.status === 200) {  
                 return resp.json()
@@ -101,7 +104,8 @@ const TasksPage = () => {
         <FlexHorScrollContainer>
             {
                 taskLists.map(list => (
-                    <TaskColumn taskList={list} 
+                    <TaskColumn key={list.id}
+                        taskList={list} 
                         listDeleteHandler={onListDelete}
                         taskMoveStartHandler={onTaskMoveStart}
                         taskMoveEndHandler={onTaskMoveEnd}

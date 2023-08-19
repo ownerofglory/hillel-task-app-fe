@@ -208,8 +208,25 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/TaskList'
-
+                $ref: '#/components/schemas/TaskList' 
+  /lists/taskMove:
+    post:
+      tags:
+        - Tasks
+      summary: Move a task from one list to another
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TaskMove'
+      responses:
+        200:
+          description: Moved task item
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TaskMoveItem'
   /lists/{listId}/tasks:
     get:
       tags:
@@ -360,3 +377,25 @@ components:
         description:
           type: string
           example: "Description 1"
+    TaskMove:
+      type: object
+      properties:
+        oldList:
+          $ref: '#/components/schemas/TaskList'
+        newList:
+          $ref: '#/components/schemas/TaskList'
+        task:
+          $ref: '#/components/schemas/Task'
+      required:
+        - oldList
+        - newList
+        - task
+    TaskMoveItem:
+      type: object
+      properties:
+        oldList:
+          $ref: '#/components/schemas/TaskList'
+        newList:
+          $ref: '#/components/schemas/TaskList'
+        task:
+          $ref: '#/components/schemas/Task'

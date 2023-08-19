@@ -24,7 +24,10 @@ const BoardsPage = () => {
   const onBoardCreate = (board) => {
     return fetch(`${baseUrl}/boards`, {
       method: 'POST',
-      body: board
+      body: JSON.stringify(board),
+      headers: {
+        'Content-Type': 'application/json'
+      }
     }).then(resp => {
       if (resp.status === 200) {
         return resp.json()
@@ -41,7 +44,10 @@ const BoardsPage = () => {
   const onBoardEdit = (board) => {
     return fetch(`${baseUrl}/boards/${board.id}`, {
       method: 'PUT',
-      body: board
+      body: JSON.stringify(board),
+      headers: {
+        'Content-Type': 'application/json'
+      }
     }).then(resp => {
       if (resp.status === 200) {
         return resp.json()
@@ -86,7 +92,7 @@ const BoardsPage = () => {
               <FlexItemContainer>
                 {
                   boards.map(board => (
-                    <TaskBoardItem board={board} 
+                    <TaskBoardItem key={board.id} board={board} 
                     editHandler={onBoardEdit} 
                     deleteHandler={onBoardDelete} />
                   ))

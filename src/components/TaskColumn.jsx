@@ -103,7 +103,10 @@ const TaskColumn = (props) => {
     const onTaskListEdit = (editedTaskList) => {
         fetch(`${baseUrl}/lists/${taskList.id}`, {
             method: 'PUT',
-            body: editedTaskList
+            body: JSON.stringify(editedTaskList),
+            headers: {
+                'Content-Type': 'application/json'
+            }
         }).then(resp => resp.json())
         .then(data => {
             setTaskList(data)
@@ -114,7 +117,10 @@ const TaskColumn = (props) => {
     const onTaskEdit = (task) => {
         return fetch(`${baseUrl}/lists/${taskList.id}/tasks/${task.id}`, {
             method: 'PUT',
-            body: task
+            body: JSON.stringify(task),
+            headers: {
+                'Content-Type': 'application/json'
+            }
         }).then(resp => {
             if (resp.status === 200) {
                 return resp.json()
@@ -140,7 +146,10 @@ const TaskColumn = (props) => {
     const onTaskCreate = (task) => {
         return fetch(`${baseUrl}/lists/${taskList.id}/tasks`, {
             method: 'POST',
-            body: task
+            body: JSON.stringify(task),
+            headers: {
+                'Content-Type': 'application/json'
+            }
         }).then(resp => {
             if (resp.status === 200) {
                 return resp.json()
@@ -192,7 +201,8 @@ const TaskColumn = (props) => {
             <Container className='dropZone' style={style} onDrop={(e) => onDrop(e)} onDragOver={(e) => onDragOver(e)}>
                 {
                     tasks.map(task => (
-                        <TaskItem task={task} 
+                        <TaskItem key={task.id}
+                            task={task} 
                             editHandler={onTaskEdit} 
                             deleteHandler={onTaskDelete} 
                             dragStartHandler={onTaskDragStart}
