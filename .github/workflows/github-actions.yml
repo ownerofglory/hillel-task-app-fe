@@ -17,4 +17,4 @@ jobs:
     - name: Deploy react app to github pages
       uses: tanwanimohit/deploy-react-to-ghpages@v1.0.2
       env:
-        REACT_APP_BACKEND_URL: {{ secrets.BACKEND_URL }}
+        REACT_APP_BACKEND_URL: ${{ secrets.BACKEND_URL }}
