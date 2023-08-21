@@ -1,0 +1,16 @@
+{
+  "files": {
+    "main.css": "/hillel-task-app-fe/static/css/main.4e60360d.css",
+    "main.js": "/hillel-task-app-fe/static/js/main.29060372.js",
+    "static/js/787.6a57a147.chunk.js": "/hillel-task-app-fe/static/js/787.6a57a147.chunk.js",
+    "static/media/logo.svg": "/hillel-task-app-fe/static/media/logo.6ce24c58023cc2f8fd88fe9d219db6c6.svg",
+    "index.html": "/hillel-task-app-fe/index.html",
+    "main.4e60360d.css.map": "/hillel-task-app-fe/static/css/main.4e60360d.css.map",
+    "main.29060372.js.map": "/hillel-task-app-fe/static/js/main.29060372.js.map",
+    "787.6a57a147.chunk.js.map": "/hillel-task-app-fe/static/js/787.6a57a147.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.4e60360d.css",
+    "static/js/main.29060372.js"
+  ]
+}
