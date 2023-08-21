@@ -80,7 +80,10 @@ const TasksPage = () => {
 
         return fetch(`${baseUrl}/lists/taskMove`, {
             method: 'POST',
-            body: JSON.stringify(taskMove)
+            body: JSON.stringify(taskMove),
+            headers: {
+                'Content-Type': 'application/json'
+            }
         }).then(resp => {
             if (resp.status === 200) {
                 return resp.json()

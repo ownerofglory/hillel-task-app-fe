@@ -30,6 +30,9 @@ const CreateTaskForm = (props) => {
 
     const onButtonClick = (e) => {
         if (open) {
+            if (!task.description) {
+                task.description = ''
+            }
             props.createHandler(task).then(() => {
                 setOpen(false)
                 setButtonVar('secondary')

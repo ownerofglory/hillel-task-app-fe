@@ -181,11 +181,11 @@ const TaskColumn = (props) => {
 
     useEffect(() => {
         getTasks(taskList.id)
-    }, [])
+    }, [props.taskList])
 
   return (
     <div style={listWrapperStyle}>
-        <Container style={listStyle}>
+        <Container style={listStyle} className='dropZone'  onDrop={(e) => onDrop(e)} onDragOver={(e) => onDragOver(e)}>
             <div style={columnHeaderStyle}>
                 <div style={{width: '60%'}}>
                     <h3>{taskList.name}</h3>
@@ -198,7 +198,7 @@ const TaskColumn = (props) => {
                 </Button>
             </div>
 
-            <Container className='dropZone' style={style} onDrop={(e) => onDrop(e)} onDragOver={(e) => onDragOver(e)}>
+            <Container style={style} >
                 {
                     tasks.map(task => (
                         <TaskItem key={task.id}
