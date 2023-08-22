@@ -2,7 +2,7 @@
   "name": "hillel-task-manager-fe",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://ownerofglory.github.io/hillel-task-app-fe",
+  "homepage": ".",
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^6.4.2",
     "@fortawesome/free-regular-svg-icons": "^6.4.2",
@@ -25,7 +25,8 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "predeploy": "npm run build",
-    "deploy": "gh-pages -d build"
+    "deploy": "gh-pages -d build",
+    "replacePaths": "sed -i '' 's/\\/hillel-task-app-fe/.\\//g; s/\\/hillel-task-app-fe/.\\//g' build/index.html"
   },
   "browserslist": {
     "production": [
@@ -38,5 +39,8 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "gh-pages": "^6.0.0"
   }
 }
